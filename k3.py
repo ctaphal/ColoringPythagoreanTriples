@@ -1,6 +1,6 @@
-# find all Pythagorean triples containing values from 1 to n and store in ptriples (list of lists)
 def ptripleFinder(n):
-    #brute force Pythagorean triples finder
+    # find all Pythagorean triples containing values from 1 to n and store in ptriples (list of lists)
+    # (brute force Pythagorean triples finder; includes multiples of simplified Pythagorean triples (ex. 6, 8, 10))
     ptriples = []
     for i in range(1,n+1):
         for j in range(1,n+1):
@@ -15,11 +15,12 @@ def ptripleFinder(n):
 
 def noTriplesChecker(stA, stB, stC, ptriples):
     #check whether any set has a triple in it; return True if good, return False if any set has a triple
-    #IMPLEMENT THIS
     for triple in ptriples:
         first = triple[0]
         second = triple[1]
         third = triple[2]
+
+        #print(first,second,third)
 
         if (first in stA) and (second in stA) and (third in stA):
             return False
@@ -84,8 +85,10 @@ setA = set()
 setB = set()
 setC = set()
 
-n = 20
+n = 300
 ptriples = ptripleFinder(n)
+
+failure = False
 
 for i in range (1, n+1):
 
@@ -94,13 +97,15 @@ for i in range (1, n+1):
         if i in t:
             ntriples.append(t)
 
-    failure = FALSE
     for ntriple in ntriples:
-        ntriple.remove(i)
+        copy = []
+        for num in ntriple:
+            copy.append(num)
+        copy.remove(i)
 
         first = i
-        second = ntriple[0]
-        third = ntriple[1]
+        second = copy[0]
+        third = copy[1]
 
         doesItWork = k3Checker(first, second, third, setA, setB, setC, ptriples)
         if (doesItWork == False):
@@ -114,4 +119,8 @@ for i in range (1, n+1):
         if (failure==True):
             print("Failed")
             break
-            
+
+print("Success for n =", n)
+print("SetA:", setA)
+print("SetB:", setB)
+print("SetC:", setC)
