@@ -13,25 +13,71 @@ def ptripleFinder(n):
     return ptriples
                     
 
-def noTriplesChecker(stA, stB, stC):
+def noTriplesChecker(stA, stB, stC, ptriples):
     #check whether any set has a triple in it; return True if good, return False if any set has a triple
+    #IMPLEMENT THIS
+    for triple in ptriples:
+        first = triple[0]
+        second = triple[1]
+        third = triple[2]
+
+        if (first in stA) and (second in stA) and (third in stA):
+            return False
+        
+        if (first in stB) and (second in stB) and (third in stB):
+            return False
+        
+        if (first in stC) and (second in stC) and (third in stC):
+            return False
+        
+    return True
 
 
-def k3Checker(num1, num2, num3, stA, stB, stC):
+def k3Checker(num1, num2, num3, stA, stB, stC, ptriples):
+
+    #not sure if this function is doing what I want it to do
 
     allGood = True
 
-    stA.add(first)
+    if (num1 in stB) or (num1 in stC):
+        return False
+    
+    stA.add(num1)
+
     if ((second in stA) and (third in stA)):
         return False
-    elif (second in stB):
-        if (third not in stC):
+    
+    if (second not in stB) and (second not in stC):
+        stB.add(second)
+
+    if (third not in stB) and (third not in stC):
+        stC.add(third)
+
+    allGood = noTriplesChecker(stA, stB, stC, ptriples)
+    if (allGood == False):
+        if (second not in stB) and (second not in stC):
+            stC.add(second)
+
+        if (third not in stB) and (third not in stC):
+            stB.add(third)
+    else: 
+        return True
+
+    allGood = noTriplesChecker(stA, stB, stC, ptriples)
+    if (allGood == False):
+        if (second not in stB) and (second not in stC):
+            stC.add(second)
+
+        if (third not in stB) and (third not in stC):
             stC.add(third)
-            if (allGood = False)
-
-    # put n in A, then remove n from triple; if other two number
-
-    return False
+    else:
+        return True
+    
+    allGood = noTriplesChecker(stA, stB, stC, ptriples)
+    if (allGood == False):
+        return False
+    else:
+        return True
 
 
 setA = set()
@@ -56,11 +102,16 @@ for i in range (1, n+1):
         second = ntriple[0]
         third = ntriple[1]
 
-        doesItWork = k3Checker(first, second, third, setA, setB, setC)
+        doesItWork = k3Checker(first, second, third, setA, setB, setC, ptriples)
         if (doesItWork == False):
-            failure = True
-            print("Fails")
+            doesItWork = k3Checker(first, second, third, setB, setA, setC, ptriples)
+            if (doesItWork == False):
+                doesItWork = k3Checker(first, second, third, setC, setA, setB, ptriples)
+                if (doesItWork == False):
+                    failure = True
+                    break
+        
+        if (failure==True):
+            print("Failed")
             break
-    
-    if (failure == True):
-        break
+            
