@@ -31,6 +31,16 @@ def noTriplesChecker(stA, stB, stC, ptriples):
         if (first in stC) and (second in stC) and (third in stC):
             return False
         
+    for item in setA:
+        if (item in setB) or (item in setC):
+            return False
+    for item in setB:
+        if (item in setA) or (item in setC):
+            return False
+    for item in setC:
+        if (item in setA) or (item in setB):
+            return False
+         
     return True
 
 
@@ -48,29 +58,50 @@ def k3Checker(num1, num2, num3, stA, stB, stC, ptriples):
     if ((second in stA) and (third in stA)):
         return False
     
+    added2nd = False
+    added3rd = False
+    
     if (second not in stB) and (second not in stC):
         stB.add(second)
+        added2nd = True
+
 
     if (third not in stB) and (third not in stC):
         stC.add(third)
+        added3rd = True
 
     allGood = noTriplesChecker(stA, stB, stC, ptriples)
     if (allGood == False):
+        if (added2nd==True):
+            stB.remove(second)
+            added2nd = False
+        if (added3rd==True):
+            stC.remove(third)
+            added3rd = False
         if (second not in stB) and (second not in stC):
             stC.add(second)
+            added2nd = True
 
         if (third not in stB) and (third not in stC):
             stB.add(third)
+            added3rd = True
     else: 
         return True
 
     allGood = noTriplesChecker(stA, stB, stC, ptriples)
     if (allGood == False):
+        if (added2nd==True):
+            stC.remove(second)
+            added2nd = False
+        if (added3rd==True):
+            stB.remove(third)
+            added3rd = False
         if (second not in stB) and (second not in stC):
             stC.add(second)
-
+            added2nd = True
         if (third not in stB) and (third not in stC):
             stC.add(third)
+            added3rd = True
     else:
         return True
     
@@ -85,7 +116,7 @@ setA = set()
 setB = set()
 setC = set()
 
-n = 300
+n = 400
 ptriples = ptripleFinder(n)
 
 failure = False
