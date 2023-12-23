@@ -24,22 +24,29 @@ def noTriplesChecker(stA, stB, stC, ptriples):
         #print(first,second,third)
 
         if (first in stA) and (second in stA) and (third in stA):
+            print(f"Triple ({first},{second},{third}) in Set A")
             return False
         
         if (first in stB) and (second in stB) and (third in stB):
+            print(f"Triple ({first},{second},{third}) in Set B")
             return False
         
         if (first in stC) and (second in stC) and (third in stC):
+            print(f"Triple ({first},{second},{third}) in Set C")
             return False
         
-    #print("checking A:", setA)
-    #print("checking B:", setB)
-    #print("checking C:", setC)
+    print("set A:",stA)
+    print("set B:",stB)
+    print("set C:",stC)
+
     if len(stA.intersection(stB))!=0:
+        print(stA.intersection(stB))
         return False
     if len(stB.intersection(stC))!=0:
+        print(stB.intersection(stC))
         return False
     if len(stC.intersection(stA))!=0:
+        print(stC.intersection(stA))
         return False
     
     return True
@@ -49,14 +56,13 @@ def k3Checker(first, second, third, stA, stB, stC, ptriples):
 
     #not sure if this function is doing what I want it to do
 
-    
-
     allGood = True
 
     if (first in stB) or (first in stC):
         return False
     
     stA.add(first)
+    print("first:",first)
 
     if ((second in stA) and (third in stA)):
         stA.remove(first)
@@ -68,11 +74,13 @@ def k3Checker(first, second, third, stA, stB, stC, ptriples):
     if (second not in stB) and (second not in stC):
         stB.add(second)
         added2nd = True
+        print("second:",second)
 
 
     if (third not in stB) and (third not in stC):
         stC.add(third)
         added3rd = True
+        print("third:",third)
 
     allGood = noTriplesChecker(stA, stB, stC, ptriples)
     if (allGood == False):
@@ -85,7 +93,6 @@ def k3Checker(first, second, third, stA, stB, stC, ptriples):
         if (second not in stB) and (second not in stC):
             stC.add(second)
             added2nd = True
-
         if (third not in stB) and (third not in stC):
             stB.add(third)
             added3rd = True
@@ -130,7 +137,7 @@ ptriples = ptripleFinder(n)
 failure = False
 
 for i in range (1, n+1):
-
+    print("AT n =", i)
     ntriples = []
     for t in ptriples:
         if i in t:
