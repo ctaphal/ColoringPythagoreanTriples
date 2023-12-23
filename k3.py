@@ -24,45 +24,45 @@ def noTriplesChecker(stA, stB, stC, ptriples):
         #print(first,second,third)
 
         if (first in stA) and (second in stA) and (third in stA):
-            print(f"Triple ({first},{second},{third}) in Set A")
+            print(f"Failing triple ({first},{second},{third}) in Set A")
             return False
         
         if (first in stB) and (second in stB) and (third in stB):
-            print(f"Triple ({first},{second},{third}) in Set B")
+            print(f"Failing triple ({first},{second},{third}) in Set B")
             return False
         
         if (first in stC) and (second in stC) and (third in stC):
-            print(f"Triple ({first},{second},{third}) in Set C")
+            print(f"Failing triple ({first},{second},{third}) in Set C")
             return False
         
     print("set A:",stA)
     print("set B:",stB)
     print("set C:",stC)
-
     if len(stA.intersection(stB))!=0:
-        print(stA.intersection(stB))
+        #print(stA.intersection(stB))
         return False
     if len(stB.intersection(stC))!=0:
-        print(stB.intersection(stC))
+        #print(stB.intersection(stC))
         return False
     if len(stC.intersection(stA))!=0:
-        print(stC.intersection(stA))
+        #print(stC.intersection(stA))
         return False
     
     return True
 
 
 def k3Checker(first, second, third, stA, stB, stC, ptriples):
-
-    #not sure if this function is doing what I want it to do
-
+ 
     allGood = True
 
     if (first in stB) or (first in stC):
         return False
     
+    totalSet = (stA.union(stB)).union(stC)
+    if (first in totalSet) and (second in totalSet) and (third in totalSet):
+        return True
+
     stA.add(first)
-    print("first:",first)
 
     if ((second in stA) and (third in stA)):
         stA.remove(first)
@@ -71,16 +71,56 @@ def k3Checker(first, second, third, stA, stB, stC, ptriples):
     added2nd = False
     added3rd = False
     
+    if (second in stA):
+        if (third not in stC):
+            stB.add(third)
+            added3rd = True
+    allGood = noTriplesChecker(stA, stB, stC, ptriples)
+    if (allGood == False):
+        if (added3rd==True):
+            stB.remove(third)
+            added3rd = False
+
+    if (second in stA):
+        if (third not in stB):
+            stC.add(third)
+            added3rd = True
+    allGood = noTriplesChecker(stA, stB, stC, ptriples)
+    if (allGood == False):
+        if (added3rd==True):
+            stC.remove(third)
+            added3rd = False
+    if (third in stA):
+        if (second not in stC):
+            stB.add(second)
+            added2nd = True
+    allGood = noTriplesChecker(stA, stB, stC, ptriples)
+    if (allGood == False):
+        if (added2nd==True):
+            stB.remove(second)
+            added2nd = False
+
+    if (third in stA):
+        if (second not in stB):
+            stC.add(second)
+            added2nd = True
+    allGood = noTriplesChecker(stA, stB, stC, ptriples)
+    if (allGood == False):
+        if (added2nd==True):
+            stC.remove(second)
+            added2nd = False
+
+    added2nd = False
+    added3rd = False
+
     if (second not in stB) and (second not in stC):
         stB.add(second)
         added2nd = True
-        print("second:",second)
 
 
     if (third not in stB) and (third not in stC):
         stC.add(third)
         added3rd = True
-        print("third:",third)
 
     allGood = noTriplesChecker(stA, stB, stC, ptriples)
     if (allGood == False):
@@ -122,6 +162,7 @@ def k3Checker(first, second, third, stA, stB, stC, ptriples):
             stC.remove(second)
         if (added3rd==True):
             stC.remove(third)
+        stA.remove(first)
         return False
     else:
         return True
