@@ -15,6 +15,7 @@ def ptripleFinder(n):
 
 def noTriplesChecker(stA, stB, stC, ptriples):
     #check whether any set has a triple in it; return True if good, return False if any set has a triple
+
     for triple in ptriples:
         first = triple[0]
         second = triple[1]
@@ -31,31 +32,34 @@ def noTriplesChecker(stA, stB, stC, ptriples):
         if (first in stC) and (second in stC) and (third in stC):
             return False
         
-    for item in setA:
-        if (item in setB) or (item in setC):
-            return False
-    for item in setB:
-        if (item in setA) or (item in setC):
-            return False
-    for item in setC:
-        if (item in setA) or (item in setB):
-            return False
-         
+    #print("checking A:", setA)
+    #print("checking B:", setB)
+    #print("checking C:", setC)
+    if len(stA.intersection(stB))!=0:
+        return False
+    if len(stB.intersection(stC))!=0:
+        return False
+    if len(stC.intersection(stA))!=0:
+        return False
+    
     return True
 
 
-def k3Checker(num1, num2, num3, stA, stB, stC, ptriples):
+def k3Checker(first, second, third, stA, stB, stC, ptriples):
 
     #not sure if this function is doing what I want it to do
 
+    
+
     allGood = True
 
-    if (num1 in stB) or (num1 in stC):
+    if (first in stB) or (first in stC):
         return False
     
-    stA.add(num1)
+    stA.add(first)
 
     if ((second in stA) and (third in stA)):
+        stA.remove(first)
         return False
     
     added2nd = False
@@ -107,6 +111,10 @@ def k3Checker(num1, num2, num3, stA, stB, stC, ptriples):
     
     allGood = noTriplesChecker(stA, stB, stC, ptriples)
     if (allGood == False):
+        if (added2nd==True):
+            stC.remove(second)
+        if (added3rd==True):
+            stC.remove(third)
         return False
     else:
         return True
@@ -116,7 +124,7 @@ setA = set()
 setB = set()
 setC = set()
 
-n = 400
+n = 300
 ptriples = ptripleFinder(n)
 
 failure = False
@@ -147,11 +155,15 @@ for i in range (1, n+1):
                     failure = True
                     break
         
-        if (failure==True):
-            print("Failed")
-            break
+    if (failure==True):
+        print("Failed at n =",i)
+        break
 
-print("Success for n =", n)
-print("SetA:", setA)
-print("SetB:", setB)
-print("SetC:", setC)
+if (failure==False):
+    print("Success for n =", n)
+print("A intersect B:", setA.intersection(setB))
+print("B intersect C:", setB.intersection(setC))
+print("A intersect C:", setA.intersection(setC))
+print("Set A:", setA)
+print("Set B:", setB)
+print("Set C", setC)
