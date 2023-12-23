@@ -21,8 +21,6 @@ def noTriplesChecker(stA, stB, stC, ptriples):
         second = triple[1]
         third = triple[2]
 
-        #print(first,second,third)
-
         if (first in stA) and (second in stA) and (third in stA):
             print(f"Failing triple ({first},{second},{third}) in Set A")
             return False
@@ -35,17 +33,17 @@ def noTriplesChecker(stA, stB, stC, ptriples):
             print(f"Failing triple ({first},{second},{third}) in Set C")
             return False
         
-    print("set A:",stA)
-    print("set B:",stB)
-    print("set C:",stC)
+    #print("set A:",stA)
+    #print("set B:",stB)
+    #print("set C:",stC)
     if len(stA.intersection(stB))!=0:
-        #print(stA.intersection(stB))
+        print(stA.intersection(stB))
         return False
     if len(stB.intersection(stC))!=0:
-        #print(stB.intersection(stC))
+        print(stB.intersection(stC))
         return False
     if len(stC.intersection(stA))!=0:
-        #print(stC.intersection(stA))
+        print(stC.intersection(stA))
         return False
     
     return True
@@ -54,10 +52,9 @@ def noTriplesChecker(stA, stB, stC, ptriples):
 def k3Checker(first, second, third, stA, stB, stC, ptriples):
  
     allGood = True
-
     if (first in stB) or (first in stC):
         return False
-    
+
     totalSet = (stA.union(stB)).union(stC)
     if (first in totalSet) and (second in totalSet) and (third in totalSet):
         return True
@@ -113,12 +110,12 @@ def k3Checker(first, second, third, stA, stB, stC, ptriples):
     added2nd = False
     added3rd = False
 
-    if (second not in stB) and (second not in stC):
+    if (second not in stA) and (second not in stB) and (second not in stC):
         stB.add(second)
         added2nd = True
 
 
-    if (third not in stB) and (third not in stC):
+    if (third not in stA) and (third not in stB) and (third not in stC):
         stC.add(third)
         added3rd = True
 
@@ -172,13 +169,13 @@ setA = set()
 setB = set()
 setC = set()
 
-n = 300
+n = int(input("Enter a value for n: "))
 ptriples = ptripleFinder(n)
 
 failure = False
 
 for i in range (1, n+1):
-    print("AT n =", i)
+    #print("AT n =", i)
     ntriples = []
     for t in ptriples:
         if i in t:
@@ -209,9 +206,9 @@ for i in range (1, n+1):
 
 if (failure==False):
     print("Success for n =", n)
-print("A intersect B:", setA.intersection(setB))
-print("B intersect C:", setB.intersection(setC))
-print("A intersect C:", setA.intersection(setC))
-print("Set A:", setA)
-print("Set B:", setB)
-print("Set C", setC)
+#print("A intersect B:", setA.intersection(setB))
+#print("B intersect C:", setB.intersection(setC))
+#print("A intersect C:", setA.intersection(setC))
+#print("Set A:", setA)
+#print("Set B:", setB)
+#print("Set C", setC)
